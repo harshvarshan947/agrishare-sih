@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriShare – SIH 2026 Complete Project Handbook</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 14mm 14mm 14mm 14mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.48;
+      color: #1e293b;
+      background: #ffffff;
+      font-size: 12px;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Page Breaks */
+    .page-break {
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .avoid-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    h1, h2, h3, h4 {
+      break-after: avoid;
+      page-break-after: avoid;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    /* Cover Page */
+    .cover-page {
+      height: 94vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 40px 36px;
+      background: linear-gradient(145deg, #f0fdf4 0%, #ffffff 50%, #f7fee7 100%);
+      position: relative;
+    }
+
+    .cover-badge-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-emerald {
+      background-color: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .badge-amber {
+      background-color: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .badge-blue {
+      background-color: #dbeafe;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .cover-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: #065f46;
+      line-height: 1.15;
+      margin: 20px 0 8px 0;
+    }
+
+    .cover-subtitle {
+      font-size: 18px;
+      color: #0f766e;
+      font-weight: 600;
+      margin: 0 0 16px 0;
+    }
+
+    .cover-tagline {
+      font-size: 14px;
+      color: #475569;
+      font-style: italic;
+      border-left: 4px solid #10b981;
+      padding-left: 14px;
+      margin-bottom: 24px;
+    }
+
+    .cover-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px 14px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: 800;
+      color: #047857;
+      line-height: 1.1;
+    }
+
+    .stat-label {
+      font-size: 10.5px;
+      color: #64748b;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .cover-meta {
+      border-top: 1px solid #cbd5e1;
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #475569;
+    }
+
+    /* Headings */
+    h1 {
+      font-size: 16px;
+      border-bottom: 2px solid #10b981;
+      padding-bottom: 4px;
+      margin-top: 14px;
+      margin-bottom: 8px;
+      color: #065f46;
+    }
+
+    h2 {
+      font-size: 13.5px;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      color: #1e293b;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    /* Alert and Highlight Boxes */
+    .callout {
+      border-radius: 8px;
+      padding: 9px 13px;
+      margin: 8px 0;
+      border-left: 4px solid #10b981;
+      background: #f0fdf4;
+      font-size: 11.5px;
+      page-break-inside: avoid;
+    }
+
+    .callout-amber {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .callout-blue {
+      border-left-color: #3b82f6;
+      background: #eff6ff;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 12px 0;
+      font-size: 11px;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    /* Code Blocks */
+    pre, code {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+    }
+
+    code {
+      background: #f1f5f9;
+      color: #0f766e;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 10.5px;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 10px;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 8px 0;
+      page-break-inside: avoid;
+    }
+
+    /* Grids */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 8px 0;
+      page-break-inside: avoid;
+    }
+
+    .card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 9px 12px;
+      background: #ffffff;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      page-break-inside: avoid;
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 12px;
+      color: #065f46;
+      margin-bottom: 3px;
+    }
+
+    ul, ol {
+      margin: 3px 0 6px 0;
+      padding-left: 18px;
+    }
+
+    li {
+      margin-bottom: 3px;
+      font-size: 11.5px;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 10px;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 8px;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1: COVER ==================== -->
+  <div class="cover-page page-break">
+    <div>
+      <div class="cover-badge-row">
+        <span class="badge badge-emerald">Smart India Hackathon 2026</span>
+        <span class="badge badge-amber">Ministry of Agriculture & Farmers Welfare</span>
+        <span class="badge badge-blue">Official Team Handbook</span>
+      </div>
+
+      <div class="cover-title">🌾 AgriShare Platform</div>
+      <div class="cover-subtitle">Digital Agricultural Equipment Sharing & Mechanization Ecosystem</div>
+      <div class="cover-tagline">
+        "Share Equipment. Reduce Cost. Grow Together."<br>
+        Matching farmers who need agricultural equipment with nearby equipment owners and verified operators.
+      </div>
+
+      <div class="cover-stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">86%</div>
+          <div class="stat-label">Small & Marginal Farmers Targeted</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">32%</div>
+          <div class="stat-label">Direct Cost Savings for Farmers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">28+</div>
+          <div class="stat-label">Production Routes Built</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">0</div>
+          <div class="stat-label">External API Key Costs</div>
+        </div>
+      </div>
+
+      <div class="callout callout-blue">
+        <strong>Executive Purpose:</strong> This document serves as the master technical, architectural, product, and presentation guide for our Smart India Hackathon team. Every team member should review this document to prepare for live judging, software architecture queries, and the 22-step presentation demo.
+      </div>
+    </div>
+
+    <div class="cover-meta">
+      <div>
+        <strong>Domain:</strong> Agriculture & Rural Development<br>
+        <strong>Tech Stack:</strong> React 18, Vite, TypeScript, Leaflet, Node.js, Express, Prisma
+      </div>
+      <div style="text-align: right;">
+        <strong>Version:</strong> 1.0.0 (Production Release)<br>
+        <strong>Hackathon Edition:</strong> SIH 2026 Grand Finale
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 2: PROBLEM & INNOVATIONS ==================== -->
+  <div class="page-break">
+    <h1>1. Problem Statement & Ground Reality</h1>
+
+    <div class="callout">
+      <strong>SIH Problem Statement:</strong> <em>"Match farmers who need agricultural equipment with nearby equipment owners."</em>
+    </div>
+
+    <p>
+      India has over <strong>140 million agricultural households</strong>, of which <strong>86% are small and marginal farmers</strong> holding less than 2 hectares of cultivable land. While modern farm mechanization increases crop yields by 15–20% and cuts seed-fertilizer wastage by 30%, adoption is crippled by four bottlenecks:
+    </p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">🚜 1. Prohibitive Capital Costs</div>
+        <p style="font-size: 11px; margin: 0;">A 45–55 HP tractor costs ₹7L–₹11L, plus ₹2L–₹5L for implements. Small farmers cannot justify debt-financed machinery for 10–15 days of annual usage.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">⏳ 2. Low Asset Utilization</div>
+        <p style="font-size: 11px; margin: 0;">Existing tractor owners run machinery for only 300–450 hours/year during their own sowing. For 70% of the year, valuable capital assets sit idle depreciating.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">🤝 3. Middlemen Exploitation</div>
+        <p style="font-size: 11px; margin: 0;">Farmers rely on informal brokers with unpredictable surge pricing, verbal contracts, no arrival guarantees, and zero recourse for breakdowns.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">👨‍✈️ 4. Operator Scarcity</div>
+        <p style="font-size: 11px; margin: 0;">Operating heavy 4WD tractors or laser levellers requires skilled operators. Owners lack reliable drivers, while licensed rural youth lack steady jobs.</p>
+      </div>
+    </div>
+
+    <h1>2. The AgriShare Solution & 7 Core Innovations</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 25%;">Innovation</th>
+          <th style="width: 42%;">How It Works</th>
+          <th style="width: 33%;">Impact on Farmers & Evaluators</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Multi-Factor Smart Matching Engine</strong></td>
+          <td>Ranks machinery by composite score combining GPS distance, plot acreage suitability, tractor horsepower, certified health %, and pricing.</td>
+          <td>Matches farmer with ideal implement in 5–25 km radius. Explains <em>why</em> (e.g. 94% Match: 4.2 km away, 47 HP ideal for 8 acres).</td>
+        </tr>
+        <tr>
+          <td><strong>2. Double-Handshake OTP Security</strong></td>
+          <td>Two unique 4-digit codes: <strong>Pickup OTP (<code>4821</code>)</strong> released by owner to driver, and <strong>Delivery OTP (<code>7394</code>)</strong> entered by farmer upon job completion.</td>
+          <td>Eliminates equipment theft, unauthorized machine use, and billing disputes between owners and farmers.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Community Group Rental Pooling</strong></td>
+          <td>Contiguous smallholders pool adjacent farm plots (e.g., 3 farmers pooling 4 + 3 + 5 = 12 acres) for a single consolidated machinery run.</td>
+          <td>Cuts transit overhead and delivers <strong>25% to 35% bulk discount</strong> on per-acre rental costs.</td>
+        </tr>
+        <tr>
+          <td><strong>4. AgriAI Agronomic Assistant</strong></td>
+          <td>Intelligent agronomic conversational agent trained on Indian crops, regional soil types (Black, Loam, Sandy), and implement sizing.</td>
+          <td>Advises farmers on optimal equipment, diesel estimates, sowing windows, and government subsidy eligibility.</td>
+        </tr>
+        <tr>
+          <td><strong>5. Verified Driver Marketplace</strong></td>
+          <td>Integrated registry of background-verified rural operators with commercial DL endorsements and Aadhaar KYC.</td>
+          <td>Allows owners to safely dispatch unattended tractors; creates dignified rural operator employment.</td>
+        </tr>
+        <tr>
+          <td><strong>6. Government Schemes Portal</strong></td>
+          <td>Direct aggregation of central/state mechanization initiatives (SMAM, PM-KUSUM, RajKisan Sathi, Custom Hiring Centers).</td>
+          <td>Guides farmers to 40%–50% capital subsidies and state mechanization grants.</td>
+        </tr>
+        <tr>
+          <td><strong>7. 24x7 Emergency SOS Helpline</strong></td>
+          <td>One-tap distress button for mechanical breakdowns or accidents, dispatching local mechanization units and Kisan Call Center (<code>1800-180-1551</code>).</td>
+          <td>Ensures zero field downtime during sensitive sowing/harvesting windows.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ==================== PAGE 3: ROLE PORTALS & ARCHITECTURE ==================== -->
+  <div class="page-break">
+    <h1>3. Role-by-Role Feature Deep-Dive (4 Dedicated Portals)</h1>
+    <p>AgriShare provides four distinct, authenticated portals tailored specifically to Indian rural agricultural dynamics:</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">👨‍🌾 1. Farmer Portal (7 Routes)</div>
+        <ul>
+          <li><code>/farmer/dashboard</code> – Active bookings, 5-day weather forecast with agro-advisories.</li>
+          <li><code>/farmer/search</code> – Smart matching equipment search with distance, crop, and HP filters.</li>
+          <li><code>/equipment/:id</code> – Detailed specs, fuel policy, driver toggle, transparent price bill.</li>
+          <li><code>/farmer/bookings</code> – Real-time booking tracking with Pickup/Delivery OTPs & review rating.</li>
+          <li><code>/farmer/requests</code> – Custom machinery request broadcast to nearby owners.</li>
+          <li><code>/farmer/group-rentals</code> – Neighborhood cluster pooling with savings calculator.</li>
+          <li><code>/farmer/profile</code> – Aadhaar KYC, landholding records, and history.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🚜 2. Equipment Owner Portal (7 Routes)</div>
+        <ul>
+          <li><code>/owner/dashboard</code> – Fleet availability, active rentals, monthly earnings, demand radar.</li>
+          <li><code>/owner/equipment</code> – Register machinery, upload specs, set hourly/acre rates.</li>
+          <li><code>/owner/bookings</code> – Accept/decline booking requests and assign verified drivers.</li>
+          <li><code>/owner/demand</code> – Heatmap of unmet farmer demand in nearby villages.</li>
+          <li><code>/owner/revenue</code> – Recharts graphs of revenue, DBT settlements, platform fee ledger.</li>
+          <li><code>/owner/drivers</code> – Operator roster, DL verification status, driver ratings.</li>
+          <li><code>/owner/maintenance</code> – Operating hours, hydraulic oil health %, maintenance alerts.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">🚚 3. Driver / Operator Portal (5 Routes)</div>
+        <ul>
+          <li><code>/driver/dashboard</code> – Today's assignments, transit status, daily earnings summary.</li>
+          <li><code>/driver/jobs</code> – 8-stage job pipeline with Pickup & Delivery OTP verification.</li>
+          <li><code>/driver/map</code> – GPS navigation map with route polylines and turn-by-turn guidance.</li>
+          <li><code>/driver/earnings</code> – Per-job payouts, overtime calculations, instant wallet ledger.</li>
+          <li><code>/driver/profile</code> – Commercial heavy vehicle driving license and ratings.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🛡️ 4. Admin & Government Portal (8 Routes)</div>
+        <ul>
+          <li><code>/admin/dashboard</code> – Statewide mechanization KPIs, fleet health, pending KYC queue.</li>
+          <li><code>/admin/users</code> – KYC verification audit for Farmers, Owners, and Drivers.</li>
+          <li><code>/admin/equipment</code> – Statewide registry of 20+ machinery items and Custom Hiring Centers.</li>
+          <li><code>/admin/rentals</code> – Complete booking audit log, OTP safety verifications.</li>
+          <li><code>/admin/demand</code> – Seasonal crop demand trends (Kharif vs Rabi machinery).</li>
+          <li><code>/admin/revenue</code> – District-wise GTV and 5% platform assurance reserve.</li>
+          <li><code>/admin/schemes</code> – Subsidies and schemes manager (SMAM, PM-KUSUM).</li>
+          <li><code>/admin/reports</code> – Exportable CSV compliance logs for evaluation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h1>4. Technical Architecture & System Design</h1>
+    <pre>
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                             CLIENT LAYER (Browser)                          │
+│  - React 18, Vite, TypeScript, Tailwind CSS, Lucide Icons                   │
+│  - Recharts (Visualizations) + OpenStreetMap / Leaflet (Geospatial)         │
+│  - 6 Regional Languages (English, हिन्दी, राजस्थानी, ગુજરાતી, ਪੰਜਾਬੀ, मराठी)      │
+│  - Unified Dual-Sync API Engine (Browser LocalStorage + Network Fallback)   │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │ HTTP REST / JSON
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                            API & ROUTING LAYER                              │
+│  - Node.js + Express.js Modular Web Framework                               │
+│  - Routes: /api/auth, /api/equipment, /api/bookings, /api/match, /api/sos   │
+│  - Static SPA Production Host (Serves compiled React bundle)                │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │ Prisma Client
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         DATA & RELATIONAL STORAGE                           │
+│  - Prisma ORM (22 Production-Ready Relational Models)                       │
+│  - User, Equipment, Booking, DriverJob, GroupRental, Scheme, Alert, Review  │
+└─────────────────────────────────────────────────────────────────────────────┘
+    </pre>
+
+    <div class="callout callout-amber">
+      <strong>Zero-Key Reliability Guarantee:</strong> We engineered OpenStreetMap + Leaflet for free map tiles (no Google Maps API billing or quota expirations) and a resilient client-side storage engine that functions flawlessly even under erratic internet conditions.
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 4: 22-STEP DEMO ==================== -->
+  <div class="page-break">
+    <h1>5. The 22-Step SIH Live Presentation & Demo Script</h1>
+    <p>Presenters can click through step-by-step or use <strong>"Auto-Play"</strong> on the embedded <strong>Floating SIH Demo Bar (<code>SihDemoBar.tsx</code>)</strong> to demonstrate the entire platform in 2 minutes:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 8%;">Step</th>
+          <th style="width: 14%;">Actor</th>
+          <th style="width: 28%;">Action on Screen</th>
+          <th style="width: 50%;">Presentation Script (What to Say to Judges)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1–3</strong></td>
+          <td>Farmer</td>
+          <td>Opens <code>/farmer/dashboard</code> and navigates to <code>/farmer/search</code></td>
+          <td><em>"We start with Ramesh Kumar, a small farmer in Bagru, Jaipur. Ramesh has 8 acres of wheat land requiring urgent tillage. He enters his requirements into the Smart Match engine."</em></td>
+        </tr>
+        <tr>
+          <td><strong>4–5</strong></td>
+          <td>Farmer</td>
+          <td>Smart Match Results displayed with 94% score</td>
+          <td><em>"Instead of random listings, our agronomic algorithm ranks the Mahindra 575 DI as #1 Match (94% score) because it is only 4.2 km away, has 47 HP ideal for 8 acres, and 96% certified health."</em></td>
+        </tr>
+        <tr>
+          <td><strong>6–8</strong></td>
+          <td>Farmer</td>
+          <td>Opens <code>/equipment/eq-1</code>, configures booking</td>
+          <td><em>"Ramesh inspects transparent pricing: Base ₹7,600 + Driver ₹900 + Platform Fee ₹150. No hidden brokerage. He chooses Acre-based booking and requests a verified driver."</em></td>
+        </tr>
+        <tr>
+          <td><strong>9</strong></td>
+          <td>Farmer</td>
+          <td>Confirms booking; generates OTPs</td>
+          <td><em>"Booking confirmed! The platform generates a dual handshake: Pickup OTP 4821 and Delivery OTP 7394 to guarantee equipment security."</em></td>
+        </tr>
+        <tr>
+          <td><strong>10–12</strong></td>
+          <td>Owner</td>
+          <td>Switches to <code>/owner/bookings</code>, accepts & dispatches</td>
+          <td><em>"Switching to equipment owner Vikram Singh. Vikram receives the live reservation, accepts it, and assigns verified operator Rajesh Gurjar from his roster."</em></td>
+        </tr>
+        <tr>
+          <td><strong>13–16</strong></td>
+          <td>Driver</td>
+          <td>Switches to <code>/driver/jobs</code> & <code>/driver/map</code>; enters OTP</td>
+          <td><em>"Rajesh opens GPS navigation to the equipment hub. Upon arrival, the owner verifies Pickup OTP 4821 before releasing the heavy machinery."</em></td>
+        </tr>
+        <tr>
+          <td><strong>17–19</strong></td>
+          <td>Driver</td>
+          <td>Navigates to field; completes work; enters OTP</td>
+          <td><em>"Rajesh drives the tractor to Ramesh's field. Once 8 acres of tillage are verified, farmer Ramesh provides Delivery OTP 7394 to confirm completion."</em></td>
+        </tr>
+        <tr>
+          <td><strong>20–21</strong></td>
+          <td>Financials</td>
+          <td>Opens <code>/driver/earnings</code> & <code>/owner/revenue</code></td>
+          <td><em>"Instant financial settlement: Driver receives ₹900 wage, and owner receives ₹8,500 rental payout settled through DBT."</em></td>
+        </tr>
+        <tr>
+          <td><strong>22</strong></td>
+          <td>Admin</td>
+          <td>Switches to <code>/admin/dashboard</code></td>
+          <td><em>"Government nodal officers monitor district-wide tractor utilization, farmer mechanization penetration, and subsidy disbursements in real-time."</em></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ==================== PAGE 5: BUSINESS & DEFENSE ==================== -->
+  <div class="page-break">
+    <h1>6. Business Model & Unit Economics</h1>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">💰 Platform Revenue Streams</div>
+        <ul>
+          <li><strong>5% Platform Transaction Fee:</strong> Modest commission on successful bookings (₹150 to ₹400 per booking).</li>
+          <li><strong>Operator Matchmaking Fee:</strong> 3% on driver wage payouts.</li>
+          <li><strong>Featured Equipment Listings:</strong> Owners pay small fee for top placement during peak harvest seasons.</li>
+          <li><strong>Enterprise Government Analytics:</strong> Nodal officer dashboard licensing for Custom Hiring Centers (CHCs).</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 Unit Economics (8-Acre Harvest Booking)</div>
+        <ul>
+          <li><strong>Gross Transaction Value (GTV):</strong> ₹8,650</li>
+          <li><strong>Equipment Owner Payout:</strong> ₹7,600 (88%)</li>
+          <li><strong>Verified Driver Wage:</strong> ₹900 (10.4%)</li>
+          <li><strong>AgriShare Platform Revenue:</strong> ₹150 (1.6%)</li>
+          <li><strong>Farmer Cost Per Acre:</strong> ₹1,081 (vs ₹1,600 via village middlemen — <strong>32% net savings</strong>).</li>
+        </ul>
+      </div>
+    </div>
+
+    <h1>7. Judge Q&A Defense Strategy</h1>
+
+    <div class="card" style="margin-bottom: 8px;">
+      <div class="card-title">❓ Q1: "What if small farmers do not have smartphones or high-speed internet?"</div>
+      <p style="font-size: 11px; margin: 0;"><strong>Answer:</strong> <em>"We designed AgriShare with a 3-tier accessibility framework: (1) Lightweight PWA with offline caching and regional languages, (2) Assisted Booking via Village Level Entrepreneurs (VLEs) at Common Service Centers (CSCs) and Gram Panchayats, and (3) Toll-free IVR/SMS hotline linked to the Kisan Call Center (1800-180-1551) where operators place bookings on behalf of voice callers."</em></p>
+    </div>
+
+    <div class="card" style="margin-bottom: 8px;">
+      <div class="card-title">❓ Q2: "What if machinery breaks down or causes field damage during rental?"</div>
+      <p style="font-size: 11px; margin: 0;"><strong>Answer:</strong> <em>"First, machines must maintain certified health thresholds (operating hours and hydraulic score). Second, our 24/7 Emergency SOS modal immediately dispatches the nearest rural mechanic. Third, the double-handshake OTP protocol ensures farmers are billed only for completed acres, and the platform retains a 5% escrow reserve for mechanical disputes."</em></p>
+    </div>
+
+    <div class="card" style="margin-bottom: 8px;">
+      <div class="card-title">❓ Q3: "How do you prevent equipment theft or unauthorized operation?"</div>
+      <p style="font-size: 11px; margin: 0;"><strong>Answer:</strong> <em>"Equipment is never released without the Pickup OTP (4821) verified between owner and driver. Drivers undergo strict commercial driving license validation and Aadhaar verification. Live Leaflet GPS telemetry tracks transit routes from hub to field."</em></p>
+    </div>
+
+    <div class="card" style="margin-bottom: 8px;">
+      <div class="card-title">❓ Q4: "How does this differ from older agri-tech startups like EM3 or FarMart?"</div>
+      <p style="font-size: 11px; margin: 0;"><strong>Answer:</strong> <em>"Older players attempted asset-heavy models (purchasing fleets of tractors) leading to heavy debt, or pivoted to grain trading. AgriShare is a 100% asset-light peer-to-peer sharing marketplace. We uniquely feature Community Group Pooling (saving contiguous farmers 35%), an agronomic AI matching engine, and integrated driver dispatch."</em></p>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 6: TEAM ROLES & SETUP ==================== -->
+  <div>
+    <h1>8. Team Presentation Division (5-Minute SIH Pitch)</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 20%;">Speaker</th>
+          <th style="width: 25%;">Role</th>
+          <th style="width: 15%;">Time</th>
+          <th style="width: 40%;">Core Focus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Speaker 1</strong></td>
+          <td>Team Leader & Product Architect</td>
+          <td><strong>1:00 min</strong></td>
+          <td>Problem statement, 86% small farmers, ₹10 Lakh tractor barrier, and AgriShare's core mission.</td>
+        </tr>
+        <tr>
+          <td><strong>Speaker 2</strong></td>
+          <td>Tech Lead & Full-Stack Engineer</td>
+          <td><strong>1:00 min</strong></td>
+          <td>Architecture, React/Vite/TS/Prisma stack, Smart Match algorithm, zero-key Leaflet maps, and offline resilience.</td>
+        </tr>
+        <tr>
+          <td><strong>Speaker 3</strong></td>
+          <td>Product Demo Driver</td>
+          <td><strong>2:00 min</strong></td>
+          <td>Run the 22-step demo using <code>SihDemoBar</code>: Farmer books → Owner accepts → Driver navigates & delivers via OTPs.</td>
+        </tr>
+        <tr>
+          <td><strong>Speaker 4</strong></td>
+          <td>Business, Impact & Q&A Lead</td>
+          <td><strong>1:00 min</strong></td>
+          <td>Unit economics, 32% farmer savings, SMAM government integration, and leading judge Q&A defense.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h1>9. Quick Setup & Demo Credentials</h1>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">⚡ Quick 1-Click Demo Logins</div>
+        <ul style="font-size: 11px;">
+          <li><strong>Farmer:</strong> Ramesh Kumar (<code>ramesh.farmer@agrishare.in</code>)</li>
+          <li><strong>Owner:</strong> Vikram Singh Shekhawat (<code>vikram.singh@agrishare.in</code>)</li>
+          <li><strong>Driver:</strong> Rajesh Gurjar (<code>rajesh.driver@agrishare.in</code>)</li>
+          <li><strong>Admin:</strong> Amit Sharma (<code>admin@agrishare.in</code>)</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🔐 Secure Demo OTP Codes</div>
+        <ul style="font-size: 11px;">
+          <li><strong>Pickup OTP:</strong> <code>4821</code> (Owner releases machine to driver)</li>
+          <li><strong>Delivery OTP:</strong> <code>7394</code> (Farmer confirms work completion)</li>
+          <li><strong>Emergency Helpline:</strong> <code>1800-180-1551</code> (Kisan Call Center)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h1>10. Quick Local & Cloud Deployment</h1>
+    <div class="callout callout-blue">
+      <strong>Local Run:</strong> Terminal 1: <code>cd backend && node server.js</code> (Runs on port 5000) &nbsp;|&nbsp; Terminal 2: <code>cd frontend && npm run dev</code> (Runs on port 5173).<br>
+      <strong>Live Hosting:</strong> Push to GitHub and deploy <code>frontend/</code> to <strong>Vercel</strong> or drop <code>frontend/dist</code> directly onto <strong>Netlify Drop</strong> for an instant live URL.
+    </div>
+
+    <div class="footer-note">
+      AgriShare – Built with pride for Indian Farmers & Smart India Hackathon (SIH 2026) | Confidential Team Reference
+    </div>
+  </div>
+
+</body>
+</html>
