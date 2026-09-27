@@ -1,0 +1,365 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  FARMER
+  OWNER
+  DRIVER
+  ADMIN
+}
+
+enum VerificationStatus {
+  VERIFIED
+  PENDING
+  REJECTED
+}
+
+enum BookingStatus {
+  REQUESTED
+  ACCEPTED
+  DRIVER_ASSIGNED
+  GOING_TO_PICKUP
+  REACHED_PICKUP
+  EQUIPMENT_PICKED_UP
+  ON_THE_WAY
+  REACHED_FARMER
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id                 String             @id @default(uuid())
+  name               String
+  email              String             @unique
+  phone              String             @unique
+  passwordHash       String
+  role               Role
+  village            String
+  district           String
+  state              String             @default("Rajasthan")
+  avatar             String?
+  verificationStatus VerificationStatus @default(PENDING)
+  aadhaarMasked      String?
+  panMasked          String?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  farmerProfile   FarmerProfile?
+  ownerProfile    OwnerProfile?
+  driverProfile   DriverProfile?
+  notifications   Notification[]
+  sentMessages    Message[]         @relation("SenderMessages")
+  recvMessages    Message[]         @relation("ReceiverMessages")
+  reviewsGiven    Review[]          @relation("ReviewAuthor")
+  emergencyAlerts EmergencyRequest[]
+}
+
+model FarmerProfile {
+  id           String             @id @default(uuid())
+  userId       String             @unique
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  totalLand    Float              @default(5.0) // in acres
+  primaryCrops String             // comma-separated e.g. Wheat, Mustard
+  bookings     Booking[]
+  requests     EquipmentRequest[]
+  groupRentals GroupRentalMember[]
+}
+
+model OwnerProfile {
+  id               String      @id @default(uuid())
+  userId           String      @unique
+  user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName     String?
+  customHiringHub  Boolean     @default(false)
+  chcRegistrationNo String?
+  equipmentList    Equipment[]
+}
+
+model DriverProfile {
+  id              String      @id @default(uuid())
+  userId          String      @unique
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dlNumber        String
+  licenseVerified Boolean     @default(true)
+  experienceYears Int         @default(5)
+  available       Boolean     @default(true)
+  currentLat      Float?
+  currentLng      Float?
+  jobs            DriverJob[]
+}
+
+model Equipment {
+  id                  String             @id @default(uuid())
+  name                String
+  category            String
+  brand               String
+  model               String
+  year                Int
+  horsePower          Int?
+  description         String
+  ownerId             String
+  owner               OwnerProfile       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  village             String
+  district            String
+  state               String             @default("Rajasthan")
+  latitude            Float
+  longitude           Float
+  pricePerHour        Float
+  pricePerAcre        Float
+  minBookingHours     Int                @default(2)
+  driverAvailable     Boolean            @default(true)
+  driverRatePerHour   Float              @default(150.0)
+  fuelIncluded        Boolean            @default(false)
+  fuelPolicy          String
+  availabilityStatus  String             @default("AVAILABLE")
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  images         EquipmentImage[]
+  availabilities EquipmentAvailability[]
+  bookings       Booking[]
+  healthRecord   EquipmentHealth?
+  maintenanceLog MaintenanceRecord[]
+  reviews        Review[]
+}
+
+model EquipmentImage {
+  id          String    @id @default(uuid())
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  imageUrl    String
+  isPrimary   Boolean   @default(false)
+}
+
+model EquipmentAvailability {
+  id          String    @id @default(uuid())
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  date        DateTime
+  isAvailable Boolean   @default(true)
+  reason      String?
+}
+
+model Booking {
+  id               String        @id @default(uuid())
+  farmerId         String
+  farmer           FarmerProfile @relation(fields: [farmerId], references: [id])
+  equipmentId      String
+  equipment        Equipment     @relation(fields: [equipmentId], references: [id])
+  startDate        DateTime
+  endDate          DateTime
+  timeSlot         String
+  cropType         String
+  farmAreaAcres    Float
+  bookingType      String        @default("ACRE_BASED")
+  driverRequired   Boolean       @default(true)
+  fuelRequired     Boolean       @default(false)
+  baseAmount       Float
+  driverAmount     Float         @default(0.0)
+  fuelAmount       Float         @default(0.0)
+  platformFee      Float         @default(150.0)
+  discountAmount   Float         @default(0.0)
+  totalAmount      Float
+  status           BookingStatus @default(REQUESTED)
+  pickupOtp        String
+  deliveryOtp      String
+  isPickupOtpDone  Boolean       @default(false)
+  isDeliveryOtpDone Boolean      @default(false)
+  pickupLat        Float
+  pickupLng        Float
+  farmLat          Float
+  farmLng          Float
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  payment   Payment?
+  driverJob DriverJob?
+  review    Review?
+}
+
+model DriverJob {
+  id                 String    @id @default(uuid())
+  bookingId          String    @unique
+  booking            Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  driverId           String
+  driver             DriverProfile @relation(fields: [driverId], references: [id])
+  status             BookingStatus @default(DRIVER_ASSIGNED)
+  pickupProofImage   String?
+  deliveryProofImage String?
+  assignedAt         DateTime  @default(now())
+  pickedUpAt         DateTime?
+  deliveredAt        DateTime?
+  completedAt        DateTime?
+}
+
+model OTPVerification {
+  id         String   @id @default(uuid())
+  bookingId  String
+  type       String   // PICKUP or DELIVERY
+  otpCode    String
+  isVerified Boolean  @default(false)
+  verifiedAt DateTime?
+}
+
+model Payment {
+  id            String        @id @default(uuid())
+  bookingId     String        @unique
+  booking       Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  amount        Float
+  currency      String        @default("INR")
+  paymentMethod String        // UPI, CARD, CASH
+  status        PaymentStatus @default(PENDING)
+  transactionId String?
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+}
+
+model EquipmentRequest {
+  id               String        @id @default(uuid())
+  farmerId         String
+  farmer           FarmerProfile @relation(fields: [farmerId], references: [id])
+  equipmentType    String
+  crop             String
+  farmArea         Float
+  requiredDate     DateTime
+  village          String
+  district         String
+  budgetMax        Float
+  driverRequired   Boolean       @default(true)
+  fuelRequired     Boolean       @default(false)
+  status           String        @default("OPEN")
+  createdAt        DateTime      @default(now())
+}
+
+model GroupRental {
+  id               String              @id @default(uuid())
+  title            String
+  equipmentCategory String
+  village          String
+  district         String
+  targetDate       DateTime
+  targetAreaAcres  Float
+  discountPercent  Float               @default(25.0)
+  status           String              @default("FORMING")
+  members          GroupRentalMember[]
+  createdAt        DateTime            @default(now())
+}
+
+model GroupRentalMember {
+  id            String      @id @default(uuid())
+  groupRentalId String
+  groupRental   GroupRental @relation(fields: [groupRentalId], references: [id], onDelete: Cascade)
+  farmerId      String
+  farmer        FarmerProfile @relation(fields: [farmerId], references: [id])
+  acres         Float
+  joinedAt      DateTime    @default(now())
+}
+
+model Review {
+  id          String    @id @default(uuid())
+  bookingId   String    @unique
+  booking     Booking   @relation(fields: [bookingId], references: [id])
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  authorId    String
+  author      User      @relation("ReviewAuthor", fields: [authorId], references: [id])
+  rating      Int       @default(5)
+  comment     String?
+  createdAt   DateTime  @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  senderId   String
+  sender     User     @relation("SenderMessages", fields: [senderId], references: [id])
+  receiverId String
+  receiver   User     @relation("ReceiverMessages", fields: [receiverId], references: [id])
+  content    String
+  createdAt  DateTime @default(now())
+}
+
+model GovernmentScheme {
+  id                 String   @id @default(uuid())
+  title              String
+  ministry           String
+  subsidyPercentage  String
+  targetBeneficiaries String
+  description        String
+  eligibility        String   // JSON string
+  benefits           String   // JSON string
+  documentsRequired  String   // JSON string
+  applicationUrl     String
+  lastDate           DateTime
+  category           String
+}
+
+model MaintenanceRecord {
+  id             String    @id @default(uuid())
+  equipmentId    String
+  equipment      Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  serviceType    String
+  cost           Float
+  serviceDate    DateTime
+  nextServiceDue DateTime
+  notes          String?
+}
+
+model EquipmentHealth {
+  id               String    @id @default(uuid())
+  equipmentId      String    @unique
+  equipment        Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  operatingHours   Float     @default(0.0)
+  healthPercentage Int       @default(95)
+  lastInspection   DateTime  @default(now())
+  alertTriggered   Boolean   @default(false)
+}
+
+model DemandRecord {
+  id               String   @id @default(uuid())
+  equipmentCategory String
+  village          String
+  district         String
+  requestCount     Int      @default(1)
+  season           String
+  dateRecorded     DateTime @default(now())
+}
+
+model EmergencyRequest {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  bookingId    String?
+  latitude     Float
+  longitude    Float
+  issueType    String
+  description  String
+  status       String   @default("OPEN")
+  createdAt    DateTime @default(now())
+}
