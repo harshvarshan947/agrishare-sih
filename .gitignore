@@ -7,6 +7,11 @@ backend/node_modules/
 dist/
 frontend/dist/
 dist-ssr/
+.gradle/
+**/android/build/
+**/android/app/build/
+**/android/.gradle/
+**/android/capacitor-cordova-android-plugins/build/
 
 # Environment files
 .env

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AgriShare</string>
+    <string name="title_activity_main">AgriShare</string>
+    <string name="package_name">in.agrishare.app</string>
+    <string name="custom_url_scheme">in.agrishare.app</string>
+</resources>
