@@ -502,9 +502,9 @@ app.get('/api/health', (req, res) => {
 const frontendDist = path.join(__dirname, '../frontend/dist');
 app.use(express.static(frontendDist));
 
-// Catch-all route to support client-side SPA routing (React Router)
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) {
+// Catch-all fallback to support client-side SPA routing (React Router)
+app.use((req, res, next) => {
+  if (req.method !== 'GET' || req.path.startsWith('/api')) {
     return next();
   }
   res.sendFile(path.join(frontendDist, 'index.html'), (err) => {
