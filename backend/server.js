@@ -284,9 +284,92 @@ app.post('/api/auth/demo-login', (req, res) => {
 });
 
 app.post('/api/auth/login', (req, res) => {
-  const { email, phone, role } = req.body;
-  const user = users.find((u) => u.email === email || u.phone === phone) || users[0];
+  const { identifier, email, phone, role } = req.body;
+  const searchVal = (identifier || email || phone || '').trim().toLowerCase();
+
+  if (!searchVal) {
+    return res.status(400).json({ success: false, error: 'Email or mobile number is required' });
+  }
+
+  // Check if someone passed a plain word like "rakesh"
+  const isEmail = searchVal.includes('@');
+  const digitsOnly = searchVal.replace(/\D/g, '');
+
+  if (!isEmail && digitsOnly.length < 10) {
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid input. Please provide a valid email address (e.g. name@domain.com) or a 10-digit mobile number.',
+    });
+  }
+
+  // Find user by email or phone and role
+  const user = users.find((u) => {
+    const roleMatch = !role || u.role === role;
+    if (!roleMatch) return false;
+
+    const emailMatch = u.email && u.email.toLowerCase() === searchVal;
+    const cleanUserPhone = (u.phone || '').replace(/\D/g, '');
+    const phoneMatch = digitsOnly.length >= 10 && cleanUserPhone.endsWith(digitsOnly.slice(-10));
+
+    return emailMatch || phoneMatch;
+  });
+
+  if (!user) {
+    return res.status(401).json({
+      success: false,
+      error: `No registered account found for ${role || 'selected role'} with "${searchVal}". Please check credentials or register.`,
+    });
+  }
+
   res.json({ success: true, user, token: 'demo-jwt-token-sih-2026' });
+});
+
+app.post('/api/auth/register', (req, res) => {
+  const { name, email, phone, role, village, district, state } = req.body;
+
+  if (!name || name.trim().length < 2) {
+    return res.status(400).json({ success: false, error: 'Full name must be at least 2 characters' });
+  }
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!email || !emailRegex.test(email.trim())) {
+    return res.status(400).json({ success: false, error: 'Please enter a valid email address (e.g. name@domain.com)' });
+  }
+
+  const cleanDigits = (phone || '').replace(/\D/g, '').slice(-10);
+  if (!cleanDigits || cleanDigits.length !== 10 || !/^[6-9]/.test(cleanDigits)) {
+    return res.status(400).json({ success: false, error: 'Please enter a valid 10-digit Indian mobile number starting with 6-9' });
+  }
+
+  const cleanEmail = email.trim().toLowerCase();
+  const existing = users.find(
+    (u) =>
+      (u.email && u.email.toLowerCase() === cleanEmail) ||
+      (u.phone && u.phone.replace(/\D/g, '').endsWith(cleanDigits))
+  );
+
+  if (existing) {
+    return res.status(409).json({ success: false, error: 'An account with this email or mobile number already exists' });
+  }
+
+  const newUser = {
+    id: `${(role || 'user').toLowerCase()}-${Date.now()}`,
+    name: name.trim(),
+    email: cleanEmail,
+    phone: `+91 ${cleanDigits.slice(0, 5)} ${cleanDigits.slice(5)}`,
+    role: role || 'FARMER',
+    village: village || 'Bagru',
+    district: district || 'Jaipur',
+    state: state || 'Rajasthan',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    verificationStatus: 'VERIFIED',
+    rating: 5.0,
+    totalRentals: 0,
+    createdAt: new Date().toISOString(),
+  };
+
+  users.unshift(newUser);
+  res.status(201).json({ success: true, user: newUser, token: 'demo-jwt-token-sih-2026' });
 });
 
 app.get('/api/users', (req, res) => {

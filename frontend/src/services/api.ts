@@ -74,6 +74,57 @@ export const api = {
     return u!;
   },
 
+  registerUser: async (userData: {
+    name: string;
+    email: string;
+    phone: string;
+    role: Role;
+    village: string;
+    district: string;
+    state?: string;
+    aadhaarMasked?: string;
+    panMasked?: string;
+    dlNumber?: string;
+  }): Promise<User> => {
+    const cleanDigits = userData.phone.replace(/\D/g, '').slice(-10);
+    const newUser: User = {
+      id: `${userData.role.toLowerCase()}-${Date.now()}`,
+      name: userData.name.trim(),
+      email: userData.email.trim().toLowerCase(),
+      phone: `+91 ${cleanDigits.slice(0, 5)} ${cleanDigits.slice(5)}`,
+      role: userData.role,
+      village: userData.village.trim(),
+      district: userData.district.trim(),
+      state: userData.state || 'Rajasthan',
+      avatar:
+        userData.role === 'FARMER'
+          ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
+          : userData.role === 'OWNER'
+          ? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'
+          : 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80',
+      verificationStatus: 'VERIFIED',
+      aadhaarMasked: userData.aadhaarMasked || 'XXXX-XXXX-9921',
+      panMasked: userData.panMasked || 'ABCDE1234F',
+      dlNumber: userData.dlNumber,
+      totalRentals: 0,
+      rating: 5.0,
+    };
+
+    currentUsers.unshift(newUser);
+    setStorage('users', currentUsers);
+
+    // Also notify backend if active
+    try {
+      fetch(`${BACKEND_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUser),
+      }).catch(() => {});
+    } catch {}
+
+    return newUser;
+  },
+
   // Equipment
   getEquipmentList: async (filters?: {
     category?: string;
