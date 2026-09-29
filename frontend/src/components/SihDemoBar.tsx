@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDemoFlow, DEMO_STEPS } from '../context/DemoFlowContext';
 import { useAuth } from '../context/AuthContext';
 import { Role } from '../types';
@@ -18,6 +19,18 @@ export const SihDemoBar: React.FC = () => {
   const { currentRole, loginAsRole } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRoleSwitch = async (r: Role) => {
+    await loginAsRole(r);
+    const routes: Record<Role, string> = {
+      FARMER: '/farmer/dashboard',
+      OWNER: '/owner/dashboard',
+      DRIVER: '/driver/dashboard',
+      ADMIN: '/admin/dashboard',
+    };
+    navigate(routes[r]);
+  };
 
   const stepInfo = DEMO_STEPS.find((s) => s.step === currentStep) || DEMO_STEPS[0];
 
@@ -47,7 +60,7 @@ export const SihDemoBar: React.FC = () => {
               {(['FARMER', 'OWNER', 'DRIVER', 'ADMIN'] as Role[]).map((r) => (
                 <button
                   key={r}
-                  onClick={() => loginAsRole(r)}
+                  onClick={() => handleRoleSwitch(r)}
                   className={`px-2.5 py-1 rounded-md font-medium transition-all ${
                     currentRole === r
                       ? 'bg-emerald-500 text-white shadow-sm'
