@@ -8,7 +8,6 @@ import {
   X,
   LogOut,
   ChevronDown,
-  Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -31,11 +30,11 @@ const ROLE_CONFIG: Record<Role, RoleNavConfig> = {
     dashboardRoute: '/farmer/dashboard',
     links: [
       { name: 'Dashboard', path: '/farmer/dashboard' },
-      { name: 'Find Equipment', path: '/farmer/search' },
-      { name: 'My Bookings', path: '/farmer/bookings' },
-      { name: 'Group Rentals', path: '/farmer/group-rentals' },
-      { name: 'Smart Requests', path: '/farmer/requests' },
-      { name: 'Govt Schemes', path: '/admin/schemes' },
+      { name: 'Find Equip', path: '/farmer/search' },
+      { name: 'Bookings', path: '/farmer/bookings' },
+      { name: 'Groups', path: '/farmer/group-rentals' },
+      { name: 'Requests', path: '/farmer/requests' },
+      { name: 'Schemes', path: '/admin/schemes' },
     ],
   },
   OWNER: {
@@ -45,12 +44,11 @@ const ROLE_CONFIG: Record<Role, RoleNavConfig> = {
     dashboardRoute: '/owner/dashboard',
     links: [
       { name: 'Dashboard', path: '/owner/dashboard' },
-      { name: 'Fleet Inventory', path: '/owner/equipment' },
-      { name: 'Booking Requests', path: '/owner/bookings' },
-      { name: 'Demand Radar', path: '/owner/demand' },
-      { name: 'Fleet Revenue', path: '/owner/revenue' },
+      { name: 'Fleet', path: '/owner/equipment' },
+      { name: 'Bookings', path: '/owner/bookings' },
+      { name: 'Demand', path: '/owner/demand' },
+      { name: 'Revenue', path: '/owner/revenue' },
       { name: 'Drivers', path: '/owner/drivers' },
-      { name: 'Maintenance', path: '/owner/maintenance' },
     ],
   },
   DRIVER: {
@@ -60,10 +58,10 @@ const ROLE_CONFIG: Record<Role, RoleNavConfig> = {
     dashboardRoute: '/driver/dashboard',
     links: [
       { name: 'Dashboard', path: '/driver/dashboard' },
-      { name: "Today's Jobs", path: '/driver/jobs' },
+      { name: 'Jobs', path: '/driver/jobs' },
       { name: 'Route Map', path: '/driver/map' },
       { name: 'Earnings', path: '/driver/earnings' },
-      { name: 'Profile & DL', path: '/driver/profile' },
+      { name: 'Profile', path: '/driver/profile' },
     ],
   },
   ADMIN: {
@@ -73,11 +71,11 @@ const ROLE_CONFIG: Record<Role, RoleNavConfig> = {
     dashboardRoute: '/admin/dashboard',
     links: [
       { name: 'Overview', path: '/admin/dashboard' },
-      { name: 'Users & KYC', path: '/admin/users' },
-      { name: 'Equipment Fleet', path: '/admin/equipment' },
-      { name: 'Rentals Audit', path: '/admin/rentals' },
-      { name: 'Demand Radar', path: '/admin/demand' },
-      { name: 'Govt Schemes', path: '/admin/schemes' },
+      { name: 'Users', path: '/admin/users' },
+      { name: 'Fleet', path: '/admin/equipment' },
+      { name: 'Rentals', path: '/admin/rentals' },
+      { name: 'Demand', path: '/admin/demand' },
+      { name: 'Schemes', path: '/admin/schemes' },
     ],
   },
 };
@@ -140,42 +138,35 @@ export const Navbar: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 sm:h-20">
-            {/* Brand Logo & Active Role Badge */}
-            <div className="flex items-center space-x-3">
-              <Link to="/" className="flex items-center space-x-2.5 group">
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-600/30 group-hover:scale-105 transition-transform">
-                  <Tractor className="w-6 h-6" />
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs w-full">
+        <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+          <div className="flex items-center justify-between h-16 sm:h-20 gap-2">
+            {/* Brand Logo */}
+            <div className="flex items-center space-x-2 shrink-0">
+              <Link to="/" className="flex items-center space-x-2 group">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-600/30 group-hover:scale-105 transition-transform shrink-0">
+                  <Tractor className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-xl font-extrabold tracking-tight text-slate-900 flex items-center gap-1">
+                  <span className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 flex items-center gap-0.5 leading-tight">
                     Agri<span className="text-emerald-600">Share</span>
                   </span>
-                  <span className="text-[10px] text-slate-500 font-semibold tracking-wider uppercase -mt-0.5">
-                    Farm Mechanization Hub
+                  <span className="hidden sm:inline text-[9px] text-slate-500 font-semibold tracking-wider uppercase -mt-0.5">
+                    Mechanization Hub
                   </span>
                 </div>
               </Link>
-
-              {currentUser && (
-                <div className="hidden xl:flex items-center space-x-1.5 px-2.5 py-1 bg-emerald-50/90 border border-emerald-200/80 rounded-full text-xs font-bold text-emerald-800">
-                  <span>{activeRoleConfig.emoji}</span>
-                  <span>{activeRoleConfig.shortLabel} View</span>
-                </div>
-              )}
             </div>
 
-            {/* Desktop Dynamic Navigation Links based on active role */}
-            <nav className="hidden lg:flex items-center space-x-1">
+            {/* Desktop Dynamic Navigation Links based on active role (xl and up) */}
+            <nav className="hidden xl:flex items-center space-x-1 min-w-0 overflow-x-hidden">
               {navLinks.map((link) => {
                 const isActive = isLinkActive(link.path);
                 return (
                   <Link
                     key={link.name}
                     to={link.path}
-                    className={`px-3 py-1.5 rounded-xl text-xs xl:text-sm font-semibold transition-all whitespace-nowrap ${
+                    className={`px-2.5 py-1.5 rounded-xl text-xs xl:text-sm font-semibold transition-all whitespace-nowrap shrink-0 ${
                       isActive
                         ? 'text-emerald-700 bg-emerald-50 shadow-2xs font-bold border border-emerald-200/70'
                         : 'text-slate-600 hover:text-emerald-700 hover:bg-slate-100/70'
@@ -187,34 +178,29 @@ export const Navbar: React.FC = () => {
               })}
             </nav>
 
-            {/* Right Controls: Role Switcher, Emergency SOS, Language, User Badge */}
-            <div className="flex items-center space-x-2 sm:space-x-2.5">
+            {/* Right Controls: Guaranteed shrink-0, ml-auto, always fully visible on screen */}
+            <div className="flex items-center space-x-1.5 sm:space-x-2 shrink-0 ml-auto">
               {/* Role Switcher Dropdown */}
-              <div className="relative dropdown-trigger">
+              <div className="relative dropdown-trigger shrink-0">
                 <button
                   onClick={() => {
                     setRoleDropdownOpen(!roleDropdownOpen);
                     setLangDropdownOpen(false);
                   }}
-                  className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-bold text-slate-800 bg-amber-50 hover:bg-amber-100/90 border border-amber-300/80 rounded-xl transition-all shadow-2xs"
+                  className="flex items-center space-x-1 px-2 sm:px-2.5 py-1.5 text-xs font-bold text-slate-800 bg-amber-50 hover:bg-amber-100/90 border border-amber-300/80 rounded-xl transition-all shadow-2xs shrink-0 cursor-pointer"
                   title="Switch Actor Role Mode"
                 >
                   <span className="text-sm">{activeRoleConfig.emoji}</span>
-                  <span className="hidden sm:inline font-bold text-amber-950">
-                    {activeRoleConfig.shortLabel}
-                  </span>
-                  <span className="hidden xl:inline text-[10px] text-amber-700 font-semibold bg-amber-200/60 px-1.5 py-0.5 rounded-md">
-                    Mode
-                  </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-amber-700" />
+                  <span className="font-bold text-amber-950">{activeRoleConfig.shortLabel}</span>
+                  <ChevronDown className="w-3 h-3 text-amber-700" />
                 </button>
 
                 {roleDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-200 py-1.5 z-50 animate-fade-in">
                     <div className="px-3.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100 flex items-center justify-between">
-                      <span>Switch Mode</span>
+                      <span>Switch Actor Mode</span>
                       <span className="text-[9px] bg-emerald-50 text-emerald-700 border border-emerald-200 px-1.5 py-0.5 rounded font-bold">
-                        Dynamic Nav
+                        SIH Demo
                       </span>
                     </div>
                     {(['FARMER', 'OWNER', 'DRIVER', 'ADMIN'] as Role[]).map((r) => {
@@ -224,13 +210,13 @@ export const Navbar: React.FC = () => {
                         <button
                           key={r}
                           onClick={() => handleRoleSelect(r)}
-                          className={`w-full text-left px-3.5 py-2.5 text-xs flex items-center justify-between transition-colors ${
+                          className={`w-full text-left px-3.5 py-2 text-xs flex items-center justify-between transition-colors cursor-pointer ${
                             isSelected
                               ? 'text-emerald-800 bg-emerald-50/80 font-bold'
                               : 'text-slate-700 hover:bg-slate-50 font-medium'
                           }`}
                         >
-                          <div className="flex items-center space-x-2.5">
+                          <div className="flex items-center space-x-2">
                             <span className="text-base">{cfg.emoji}</span>
                             <div>
                               <div className="font-bold text-slate-900 leading-tight">{cfg.shortLabel}</div>
@@ -252,27 +238,25 @@ export const Navbar: React.FC = () => {
               {/* Emergency SOS Button */}
               <button
                 onClick={() => setEmergencyModalOpen(true)}
-                className="px-2.5 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all flex items-center space-x-1.5 shadow-md shadow-red-600/30 animate-pulse hover:animate-none"
+                className="px-2 sm:px-2.5 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-all flex items-center space-x-1 shadow-md shadow-red-600/30 animate-pulse hover:animate-none shrink-0 cursor-pointer"
                 title="Immediate Mechanical & Agricultural Emergency Assistance"
               >
-                <AlertTriangle className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">SOS Help</span>
+                <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
+                <span className="hidden sm:inline">SOS</span>
               </button>
 
               {/* Language Selector Dropdown */}
-              <div className="relative dropdown-trigger">
+              <div className="relative dropdown-trigger shrink-0">
                 <button
                   onClick={() => {
                     setLangDropdownOpen(!langDropdownOpen);
                     setRoleDropdownOpen(false);
                   }}
-                  className="flex items-center space-x-1.5 px-2.5 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
+                  className="flex items-center space-x-1 px-2 py-1.5 text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors shrink-0 cursor-pointer"
+                  title="Select Language"
                 >
-                  <Globe className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="hidden sm:inline">
-                    {languages.find((l) => l.code === language)?.nativeName || 'English'}
-                  </span>
-                  <span className="sm:hidden">{language.toUpperCase()}</span>
+                  <Globe className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span className="text-xs font-bold uppercase">{language}</span>
                   <ChevronDown className="w-3 h-3 text-slate-400" />
                 </button>
 
@@ -285,7 +269,7 @@ export const Navbar: React.FC = () => {
                           setLanguage(l.code);
                           setLangDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3.5 py-2 text-xs font-medium flex items-center justify-between hover:bg-emerald-50 ${
+                        className={`w-full text-left px-3.5 py-2 text-xs font-medium flex items-center justify-between hover:bg-emerald-50 cursor-pointer ${
                           language === l.code ? 'text-emerald-700 bg-emerald-50/50 font-bold' : 'text-slate-700'
                         }`}
                       >
@@ -299,10 +283,11 @@ export const Navbar: React.FC = () => {
 
               {/* User Account / Role Badge */}
               {currentUser ? (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1.5 shrink-0">
                   <Link
                     to={getDashboardRoute()}
-                    className="flex items-center space-x-2 p-1.5 sm:px-3 sm:py-1.5 bg-emerald-50 border border-emerald-200 hover:border-emerald-300 rounded-xl text-slate-800 transition-all"
+                    className="flex items-center space-x-1.5 p-1 sm:px-2 sm:py-1 bg-emerald-50/90 border border-emerald-200 hover:border-emerald-300 rounded-xl text-slate-800 transition-all shrink-0"
+                    title={`${currentUser.name} (${currentRole})`}
                   >
                     <div className="w-7 h-7 rounded-full overflow-hidden bg-emerald-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
                       {currentUser.avatar ? (
@@ -311,35 +296,32 @@ export const Navbar: React.FC = () => {
                         currentUser.name[0]
                       )}
                     </div>
-                    <div className="hidden lg:flex flex-col text-left">
-                      <span className="text-xs font-bold text-slate-900 leading-none truncate max-w-[100px]">
-                        {currentUser.name}
-                      </span>
-                      <span className="text-[10px] font-semibold text-emerald-700 leading-none mt-0.5">
-                        {currentRole}
-                      </span>
-                    </div>
+                    <span className="hidden xl:inline text-xs font-bold text-slate-900 truncate max-w-[85px]">
+                      {currentUser.name.split(' ')[0]}
+                    </span>
                   </Link>
 
+                  {/* PROMINENT LOGOUT BUTTON - Guaranteed visible and reachable */}
                   <button
                     onClick={logout}
-                    className="p-2 text-slate-400 hover:text-red-600 rounded-xl hover:bg-slate-100 transition-colors"
-                    title="Logout"
+                    className="flex items-center space-x-1 px-2.5 py-1.5 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl transition-all shadow-2xs shrink-0 cursor-pointer"
+                    title="Logout of AgriShare"
                   >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-3.5 h-3.5 shrink-0" />
+                    <span className="hidden sm:inline">Logout</span>
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1.5 shrink-0">
                   <Link
                     to="/login"
-                    className="px-3.5 py-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition-colors"
+                    className="px-3 py-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition-colors"
                   >
                     Login
                   </Link>
                   <Link
                     to="/register"
-                    className="px-3.5 py-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-sm transition-all"
+                    className="px-3 py-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-xs transition-all"
                   >
                     Register
                   </Link>
@@ -349,21 +331,22 @@ export const Navbar: React.FC = () => {
               {/* Mobile / Tablet Hamburger Toggle */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                className="xl:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 shrink-0 cursor-pointer"
+                title="Toggle Menu"
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile / Tablet Dropdown Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-5 space-y-3 animate-slide-down">
+          <div className="xl:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-5 space-y-3 animate-slide-down shadow-xl">
             {/* Mobile Mode Switcher Grid */}
             <div className="p-3 bg-slate-50 border border-slate-200/80 rounded-2xl">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">
-                Active Actor Mode ({activeRoleConfig.shortLabel})
+                Active Mode ({activeRoleConfig.shortLabel})
               </span>
               <div className="grid grid-cols-2 gap-2">
                 {(['FARMER', 'OWNER', 'DRIVER', 'ADMIN'] as Role[]).map((r) => {
@@ -373,7 +356,7 @@ export const Navbar: React.FC = () => {
                     <button
                       key={r}
                       onClick={() => handleRoleSelect(r)}
-                      className={`px-2.5 py-2 rounded-xl text-xs font-bold transition-all text-left flex items-center space-x-2 ${
+                      className={`px-2.5 py-2 rounded-xl text-xs font-bold transition-all text-left flex items-center space-x-2 cursor-pointer ${
                         isSelected
                           ? 'bg-emerald-600 text-white shadow-xs'
                           : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
@@ -412,13 +395,26 @@ export const Navbar: React.FC = () => {
             </div>
 
             {currentUser && (
-              <Link
-                to={getDashboardRoute()}
-                onClick={() => setMobileMenuOpen(false)}
-                className="block px-3 py-2.5 rounded-xl text-sm font-bold text-white bg-emerald-600 text-center mt-3 shadow-md shadow-emerald-600/20"
-              >
-                Go to {activeRoleConfig.shortLabel} Dashboard →
-              </Link>
+              <div className="space-y-2 pt-2 border-t border-slate-100">
+                <Link
+                  to={getDashboardRoute()}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2.5 rounded-xl text-sm font-bold text-white bg-emerald-600 text-center shadow-md shadow-emerald-600/20"
+                >
+                  Go to {activeRoleConfig.shortLabel} Dashboard →
+                </Link>
+
+                <button
+                  onClick={() => {
+                    logout();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl text-sm font-bold text-red-600 bg-red-50 border border-red-200 hover:bg-red-100 transition-colors cursor-pointer"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Logout of Account</span>
+                </button>
+              </div>
             )}
           </div>
         )}
